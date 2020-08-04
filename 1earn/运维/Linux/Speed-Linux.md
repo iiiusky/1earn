@@ -10,7 +10,7 @@
 ```
 
 <p align="center">
-    <a href="https://en.wikipedia.org/wiki/Pablo_Picasso"><img src="../../../assets/img/运维/Linux/Speed-Linux.jpg" width="90%"></a>
+    <a href="https://en.wikipedia.org/wiki/Pablo_Picasso"><img src="../../../assets/img/banner/Speed-Linux.jpg" width="90%"></a>
 </p>
 
 <p align="center">
@@ -24,53 +24,57 @@
 
 # 大纲
 
-**[👍基础使用](#基础使用)**
+* **[👍 基础使用](#基础使用)**
+	* [环境变量](#环境变量)
+	* [符号](#符号)
+	* [会话](#会话)
+	* [文件和目录](#文件和目录)
+		* [查看](#查看)
+		* [创建](#创建)
+		* [删除](#删除)
+		* [查询](#查询)
+		* [修改](#修改)
+		* [比较](#比较)
+		* [链接](#链接)
+		* [压缩备份](#压缩备份)
 
-* [环境变量](#环境变量)
-* [符号](#符号)
-* [会话](#会话)
-* [文件](#文件)
-	* [查看](#查看)
-	* [创建](#创建)
-	* [删除](#删除)
-	* [查询](#查询)
-	* [修改](#修改)
-	* [比较](#比较)
-	* [链接](#链接)
-	* [压缩备份](#压缩备份)
+* **[📶 网络管理](#网络管理)**
+	* [查看网络信息](#查看网络信息)
+	* [配置](#配置)
+	* [抓包](#抓包)
+	* [传输-下载](#传输-下载)
+		* [bt](#bt)
+	* [Firewall](#Firewall)
+		* [Firewalld](#Firewalld)
+		* [Iptables](#Iptables)
+	* [软件包管理](#软件包管理)
+		* [apt](#apt)
+		* [Binary](#Binary)
+		* [dpkg](#dpkg)
+		* [Pacman](#Pacman)
+		* [rpm](#rpm)
+		* [snap](#snap)
+		* [yum](#yum)
+		* [常用软件](#常用软件)
 
-**[📶网络管理](#网络管理)**
+* **[🦋 系统管理](#系统管理)**
+	* [系统信息](#系统信息)
+		* [日志](#日志)
+	* [系统设置](#系统设置)
+		* [时间](#时间)
+		* [语言](#语言)
+		* [启动项-计划任务](#启动项-计划任务)
+		* [SELinux](#SELinux)
+	* [账号管控](#账号管控)
+	* [进程管理](#进程管理)
+	* [设备管理](#设备管理)
+		* [硬盘-数据](#硬盘-数据)
 
-* [配置](#配置)
-* [查看](#查看)
-* [抓包](#抓包)
-* [传输-下载](#传输-下载)
-	* [bt](#bt)
-* [Firewall](#Firewall)
-	* [Firewalld](#Firewalld)
-	* [Iptables](#Iptables)
-* [软件包管理](#软件包管理)
-	* [apt](#apt)
-	* [Binary](#Binary)
-	* [dpkg](#dpkg)
-	* [Pacman](#Pacman)
-	* [rpm](#rpm)
-	* [snap](#snap)
-	* [yum](#yum)
-	* [常用软件](#常用软件)
+---
 
-**[🦋系统管理](#系统管理)**
-
-* [系统设置](#系统设置)
-	* [时间](#时间)
-	* [语言](#语言)
-	* [启动项-计划任务](#启动项-计划任务)
-	* [SELinux](#SELinux)
-* [系统信息](#系统信息)
-* [账号管控](#账号管控)
-* [进程管理](#进程管理)
-* [设备管理](#设备管理)
-	* [硬盘-数据](#硬盘-数据)
+**在线查询命令**
+- [Linux命令搜索引擎](https://wangchujiang.com/linux-command/) - 非常牛逼,推荐
+- [Linux命令大全(手册)](https://man.linuxde.net/)
 
 ---
 
@@ -258,7 +262,7 @@ cd	# 切换工作目录
 	root	# 超级用户目录,存放 root 用户相关文件
 	home	# 存放普通用户相关文件
 	bin		# (binaries)存放二进制可执行文件
-	sbin	# (super user binaries)存放二进制可执行文件,只有root才能访问
+	sbin	# (super user binaries)存放二进制可执行文件,只有 root 才能访问
 	mnt		# (mount)系统管理员安装临时文件系统的安装点
 	etc		# (etcetera)存放系统配置文件
 	var		# (variable)用于存放运行时需要改变数据的文件
@@ -272,10 +276,22 @@ cd	# 切换工作目录
 
 ### 查看
 
+**目录、文件信息**
 ```bash
 ls			# 查看目录下文件
 	ls -a						# 查看目录隐藏文件
 
+pwd			# 以绝对路径的方式显示用户当前工作目录
+	pwd -P						# 目录链接时,显示实际路径而非 link 路径
+
+wc			# wc 将计算指定文件的行数、字数，以及字节数
+du			# 查看文件大小
+stat		# 查看文件属性
+file		# 探测给定文件的类型
+```
+
+**文件内容**
+```bash
 cat			# 连接文件并打印到标准输出设备上
 	cat -n						# 带行号读
 	cat -b						# 带行号,越过空白行
@@ -294,17 +310,20 @@ tail		# 用于显示文件的尾部的内容,默认情况下显示文件的尾�
 sed			# 一种流编辑器，它是文本处理中非常中的工具，能够完美的配合正则表达式使用
 	sed -n '5,10p' /etc/passwd	# 读取文件第5-10行
 
-tac			# 是 cat 的反向操作，从最后一行开始打印。
-od			# 以字符或者十六进制的形式显示二进制文件。
+tac			# 是 cat 的反向操作，从最后一行开始打印
 less		# 允许用户向前或向后浏览文件
-du			# 查看文件大小
-stat		# 查看文件属性
-file		# 探测给定文件的类型
+```
 
-pwd			# 以绝对路径的方式显示用户当前工作目录
-	pwd -P						# 目录链接时,显示实际路径而非 link 路径
+**二进制相关**
+```bash
+objdump		# 显示目标文件的信息,可以通过参数控制要显示的内容
+	objdump -p 					# 显示文件头内容
+	objdump -T					# 查看动态符号表的内容
 
-wc			# wc 将计算指定文件的行数、字数，以及字节数。
+od			# 以字符或者十六进制的形式显示二进制文件
+strings		# 在对象文件或二进制文件中查找可打印的字符串
+ldd			# 可以显示程序或者共享库所需的共享库
+nm			# 显示目标文件的符号
 ```
 
 ### 创建
@@ -371,6 +390,39 @@ fd					# 文件查找工具
 	fd <File>
 ```
 
+**找出重复文件**
+
+- jdupes
+	- https://github.com/jbruchon/jdupes
+	```bash
+	git clone https://github.com/jbruchon/jdupes
+	cd jdupes
+	make
+	./jdupes -r /home	# 递归扫描目录,包括子目录
+	./jdupes -dr /home	# 挨个确认删除
+	```
+
+- rdfind
+	```bash
+	yum install epel-release && yum install rdfind
+	# 或
+	apt-get install rdfind
+
+	rdfind -dryrun true /home			# 结果会保存在 results.txt 文件中
+	rdfind -deleteduplicates true /home	# 删除
+	```
+
+- fdupes
+	```bash
+	yum install epel-release && yum install fdupes
+	# 或
+	apt install fdupes
+
+	fdupes /home
+	fdupes -r /			# 递归扫描目录,包括子目录
+	fdupes -rd /		# 删除重复内容
+	```
+
 ### 修改
 
 **复制**
@@ -415,11 +467,25 @@ gedit								# 图形化的编辑器
 
 ```bash
 diff <变动前的文件> <变动后的文件>
-
+```
+```bash
 vimdiff <变动前的文件> <变动后的文件>
 ```
 
 ### 链接
+
+**inode**
+
+inode 是指在许多“类 Unix 文件系统”中的一种数据结构。每个 inode 保存了文件系统中的一个文件系统对象（包括文件、目录、设备文件、socket、管道, 等等）的元信息数据，但不包括数据内容或者文件名。
+
+文件系统中每个“文件系统对象”对应一个“inode”数据，并用一个整数值来辨识。这个整数常被称为 inode 号码（“i-number”或“inode number”）。由于文件系统的 inode 表的存储位置、总条目数量都是固定的，因此可以用 inode 号码去索引查找 inode 表。
+
+简而言之
+- inode 存储的是文件的元数据
+- inode 是文件在磁盘上的索引编号
+- inode 是文件的唯一标示符(主键), 而非文件名
+
+Linux 系统中，显示文件的 inode 使用 `ls -i`，使用 `df -i` 可以显示当前挂载列表中 inode 使用情况
 
 **软连接**
 
@@ -459,19 +525,6 @@ ln file1 file2
 - 不允许给目录创建硬链接(注意是不能通过 ln 的方式)
 - 只有在同一文件系统才能创建硬链接
 
-**inode**
-
-inode 是指在许多“类 Unix 文件系统”中的一种数据结构。每个 inode 保存了文件系统中的一个文件系统对象（包括文件、目录、设备文件、socket、管道, 等等）的元信息数据，但不包括数据内容或者文件名。
-
-文件系统中每个“文件系统对象”对应一个“inode”数据，并用一个整数值来辨识。这个整数常被称为 inode 号码（“i-number”或“inode number”）。由于文件系统的 inode 表的存储位置、总条目数量都是固定的，因此可以用 inode 号码去索引查找 inode 表。
-
-简而言之
-- inode 存储的是文件的元数据
-- inode 是文件在磁盘上的索引编号
-- inode 是文件的唯一标示符(主键), 而非文件名
-
-Linux 系统中，显示文件的 inode 使用 `ls -i`，使用 `df -i` 可以显示当前挂载列表中 inode 使用情况
-
 ### 压缩备份
 
 ```bash
@@ -486,6 +539,9 @@ tar -rvf test.tar.bz2 test2 				# 追加一个内容
 .tar.gz 和 .tgz
 tar -zxvf FileName.tar.gz					# 解压
 tar -zcvf FileName.tar.gz DirName			# 压缩
+
+.tar.xz
+tar -xvJf FileName.tar.xz					# 解压
 
 .tar.Z
 tar -Zxvf FileName.tar.Z					# 解压
@@ -535,12 +591,17 @@ ar -p FileName.deb data.tar.gz | tar zxf -	# 解包
 ---
 
 # 网络管理
-## 查看
+## 查看网络信息
+
+**主机名**
+```bash
+hostname				# 查看本机的hostname
+```
 
 **IP 地址**
 ```bash
-ifconfig		# ifconfig 命令已经被弃用，不应该使用
-ip a			# 显示网络设备的运行状态
+ifconfig				# ifconfig 命令已经被弃用，不应该使用
+ip a					# 显示网络设备的运行状态
 hostname -I
 netstat -a
 cat /proc/net/fib_trie
@@ -550,9 +611,9 @@ sudo -v
 
 **端口**
 ```bash
-getent services # 查看所有服务的默认端口名称和端口号
-ss -tnlp
-lsof -i
+getent services 		# 查看所有服务的默认端口名称和端口号
+ss -tnlp				# 获取 socket 统计信息
+lsof -i					# 列出当前系统打开文件
 netstat -antup
 netstat -antpx
 netstat -tulpn
@@ -560,123 +621,142 @@ netstat -tulpn
 
 **路由表**
 ```bash
-route
-ip route		# 显示核心路由表
-ip neigh		# 显示邻居表
+route					# 查看路由表
+ip route				# 显示核心路由表
+ip neigh				# 显示邻居表
 ```
 
 **DNS**
 ```bash
-cat /etc/resolv.conf
+cat /etc/resolv.conf	# 查看 DNS 解析配置文件
 ```
 
 **arp 条目**
 ```bash
-arp -e
+arp -e					# 以 Linux 的显示风格显示 arp 缓冲区中的条目
 ```
 
 ---
 
 ## 配置
 
-**Ubuntu**
+**修改主机名**
 ```bash
-vim /etc/network/interfaces
-
-auto enp7s0	 				# 使用的网络接口
-iface enp7s0 inet static	# 静态 ip 设置
-address 10.0.208.222
-netmask 255.255.240.0
-gateway 10.0.208.1
-dns-nameservers 10.0.208.1
-```
-```bash
-iface enp7s0 inet dhcp		# dhcp 配置
-```
-```bash
-ip addr flush enp7s0
-systemctl restart networking.service
-
-systemctl restart NetworkManager
-systemctl enable NetworkManager
-```
-
-- **修改 DNS**
-
-	方法一
-	```vim
-	vim /etc/network/interfaces
-
-	dns-nameservers 8.8.8.8
-	```
-	重启后DNS就生效了,这时候再看/etc/resolv.conf,最下面就多了一行
-
-	方法二
-	```vim
-	vim /etc/resolv.conf
-
-	nameserver 8.8.8.8
-	```
-	```bash
-	chattr +i /etc/resolv.conf	# 限制用户(包括 root)删除、修改、增加、链接等操作.要修改的话要先删掉这个设置 chattr -i /etc/resolv.conf
-	service network restart
-	```
-
-**Centos**
-```bash
-vim /etc/sysconfig/network-scripts/ifcfg-eth0	# 配置文件名称和网卡对应,可使用 ip a 查看所有网卡名称
-
-HOSTNAME=test
-onboot=yes			# 激活网络
-HWADDR=00:0C:29:F1:2E:7B
-BOOTPROTO=static	# 使用静态 IP,而不是由 DHCP 分配 IP
-# BOOTPROTO=dhcp 这个是 DHCP 的配置,如果配这个那下面的就不需要配置了
-IPADDR=172.16.102.61
-PREFIX=24
-GATEWAY=172.16.102.254
-DNS1=223.5.5.5
-```
-```vim
 vim /etc/hosts
 
-127.0.0.1  test localhost	# 修改 localhost.localdomain 为 test,shutdown -r now 重启使修改生效
+127.0.0.1  test localhost		# 修改 localhost.localdomain 为 test,shutdown -r now 重启使修改生效
 ```
+或
 ```bash
-service network restart
-systemctl restart NetworkManager	# 重启网络管理
-systemctl enable NetworkManager
+hostnamectl set-hostname test	# 修改 hostname 立即生效且重启也生效
 ```
 
-- **修改 DNS**
+**修改 DNS**
+
+- 通用(一次性,重启失效)
 	```vim
 	vim /etc/resolv.conf
 
 	nameserver 8.8.8.8
 	```
-	```bash
-	chattr +i /etc/resolv.conf		# 限制用户(包括 root)删除、修改、增加、链接等操作.要修改的话要先删掉这个设置 chattr -i /etc/resolv.conf
-	service network restart
+
+- 通用(长期)
+	```vim
+	apt install resolvconf
+
+	vim /etc/resolvconf/resolv.conf.d/head
+
+	nameserver 8.8.8.8
+	```
+	```
+	resolvconf -u
 	```
 
-**Arch**
-```bash
-ifconfig eth0 up	# 启动网卡
-dhcpcd  eth0		# 获取 ip
-```
-`ifconfig -a` 查看下可用的网卡
-```vim
-vim /etc/rc.conf
+**修改IP**
+ - Ubuntu
+	```bash
+	vim /etc/network/interfaces
 
-interface=eth0
-eth0="dhcp"
-lo="lo 127.0.0.1"
-eth0="eth0 192.168.0.2 netmask 255.255.255.0 broadcast 192.168.0.255"
+	auto enp7s0	 				# 使用的网络接口
+	iface enp7s0 inet static	# 静态 ip 设置
+	address 10.0.208.222
+	netmask 255.255.240.0
+	gateway 10.0.208.1
+	```
+	```bash
+	ip addr flush enp7s0
+	systemctl restart networking.service
 
-INTERFACES=(eth0)
-gateway="default gw 192.168.0.1"
-ROUTES=(gateway)
-```
-`/etc/rc.d/network restart`
+	systemctl restart NetworkManager
+	systemctl enable NetworkManager
+	```
+
+- Centos
+	```bash
+	vim /etc/sysconfig/network-scripts/ifcfg-eth0	# 配置文件名称和网卡对应,可使用 ip a 查看所有网卡名称
+
+	HOSTNAME=test
+	onboot=yes			# 激活网络
+	HWADDR=00:0C:29:F1:2E:7B
+	BOOTPROTO=static	# 使用静态 IP,而不是由 DHCP 分配 IP
+	# BOOTPROTO=dhcp 这个是 DHCP 的配置,如果配这个那下面的就不需要配置了
+	IPADDR=172.16.102.61
+	PREFIX=24
+	GATEWAY=172.16.102.254
+	DNS1=223.5.5.5
+	```
+	```bash
+	service network restart
+	systemctl restart NetworkManager	# 重启网络管理
+	systemctl enable NetworkManager
+	```
+
+- Arch
+	```bash
+	ifconfig -a			# 查看下可用的网卡
+	ifconfig eth0 up	# 启动网卡
+	dhcpcd  eth0		# 获取 ip
+	```
+	```vim
+	vim /etc/rc.conf
+
+	interface=eth0
+	eth0="dhcp"
+	lo="lo 127.0.0.1"
+	eth0="eth0 192.168.0.2 netmask 255.255.255.0 broadcast 192.168.0.255"
+
+	INTERFACES=(eth0)
+	gateway="default gw 192.168.0.1"
+	ROUTES=(gateway)
+	```
+	```bash
+	/etc/rc.d/network restart
+	```
+
+**配置DHCP**
+- Ubuntu
+	```bash
+	iface enp7s0 inet dhcp		# dhcp 配置
+	```
+
+**配置无线网卡**
+- WM Ware(开机后)
+
+    虚拟机->可移动设备->Ralink 802.11 n Wlan(显卡型号)->连接(断开与主机的连接)
+
+- VBox
+
+    虚拟机关机状态下->将设备插入主机->设置->USB设备->添加->删除除了供应商标识(VendorID)和产品标识(ProductID)之外的参数->开机->插入设备
+
+- 验证是否连接成功
+
+    ```bash
+    lsusb
+    airmon-ng
+    ifconfig
+    iwconfig
+    ```
+    出现无线网卡型号即为成功
 
 **ethtool**
 
@@ -687,7 +767,7 @@ ethtool -i eth0		# 查询该网卡的驱动相关信息
 ethtool -d eth0		# 查询 eth0 网口注册性信息
 ethtool -S eth0		# 查询网口收发包统计
 ethtool -s eth0 speed 100 autoneg off	# -s 选项可以修改网卡配置
-# 以上命令将eth0网卡的自协商传输模式关闭，传输速率改为100Mb/s。命令执行后需要重新启动eth0网卡：
+# 以上命令将 eth0 网卡的自协商传输模式关闭，传输速率改为 100Mb/s。命令执行后需要重新启动 eth0 网卡：
 ifup eth0
 
 # 通过以上命令修改网卡配置，在机器重启后配置将不再生效
@@ -699,8 +779,10 @@ ifup eth0
 
 **tcpdump**
 ```bash
-# 安装
+# Debian安装
 apt install tcpdump -y
+
+# Redhat安装
 yum install tcpdump -y
 
 # 当我们在没用任何选项的情况下运行 tcpdump 命令时,它将捕获所有接口上的数据包
@@ -712,7 +794,7 @@ tcpdump -i enp0s3 -c 12
 # 使用 -D 选项显示 tcpdump 命令的所有可用接口
 tcpdump -D
 
-# 默认情况下,在 tcpdump 命令输出中,不显示可读性好的时间戳,如果您想将可读性好的时间戳与每个捕获的数据包相关联,那么使用 -tttt 选项,示例如下所示
+# 默认情况下,在 tcpdump 命令输出中,不显示可读性好的时间戳,如果你想将可读性好的时间戳与每个捕获的数据包相关联,那么使用 -tttt 选项,示例如下所示
 tcpdump -i enp0s3 -c 12 -tttt
 
 # 使用 tcpdump 命令中的 -w 选项将捕获的 TCP/IP 数据包保存到一个文件中
@@ -871,10 +953,25 @@ ls -alh /var/cache/yum/
 	update-alternatives --set java /opt/jdk1.8.0_91/bin/java	# 直接指定
 ```
 
+**alien**
+
+alien 是一个用于在各种不同的 Linux 包格式相互转换的工具，其最常见的用法是将 .rpm 转换成 .deb（或者反过来）。
+```bash
+apt install alien			# 安装 alien
+alien --to-deb oracle-instantclient19.6-basic-19.6.0.0.0-1.x86_64.rpm	# 将 oracle Basic Package 从 rpm 转为 deb 格式
+```
+
 ### apt
 
 > apt 的全称是 Advanced Packaging Tool 是 Linux 系统下的一款安装包管理工具.
 
+**安装软件**
+```bash
+apt install <package>
+apt-get install <package>
+```
+
+**更新**
 ```bash
 # 更新源:
 apt-get update
@@ -883,11 +980,28 @@ apt-get update
 apt-get update & apt-get upgrade
 apt-get dist-upgrade
 apt-get clean
+```
 
-# 无法获得锁 /var/lib/apt/lists/lock - open (11: 资源暂时不可用)
+**无法获得锁 /var/lib/apt/lists/lock - open (11: 资源暂时不可用)**
+```bash
 rm -rf /var/cache/apt/archives/lock
 rm -rf /var/lib/dpkg/lock-frontend
 rm -rf /var/lib/dpkg/lock		# 强制解锁占用
+rm /var/lib/dpkg/lock
+rm /var/lib/apt/lists/lock
+```
+
+**禁用 Ubuntu 自动更新**
+```bash
+nano /etc/apt/apt.conf.d/20auto-upgrades
+
+# 如果你不希望系统自动检查更新
+    APT::Periodic::Update-Package-Lists "0";
+    APT::Periodic::Unattended-Upgrade "0";
+
+# 果你希望它检查更新但不自动安装无人值守的升级
+    APT::Periodic::Update-Package-Lists "1";
+    APT::Periodic::Unattended-Upgrade "0";
 ```
 
 **Ubuntu apt 换源**
@@ -911,14 +1025,14 @@ deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted unive
 vim /etc/apt/sources.list
 
 # 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ buster main contrib non-free
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ buster main contrib non-free
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-updates main contrib non-free
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-updates main contrib non-free
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-backports main contrib non-free
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-backports main contrib non-free
-deb https://mirrors.tuna.tsinghua.edu.cn/debian-security buster/updates main contrib non-free
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian-security buster/updates main contrib non-free
+deb http://mirrors.aliyun.com/debian/ buster main contrib non-free
+# deb-src http://mirrors.aliyun.com/debian/ buster main contrib non-free
+deb http://mirrors.aliyun.com/debian/ buster-updates main contrib non-free
+# deb-src http://mirrors.aliyun.com/debian/ buster-updates main contrib non-free
+deb http://mirrors.aliyun.com/debian/ buster-backports main contrib non-free
+# deb-src http://mirrors.aliyun.com/debian/ buster-backports main contrib non-free
+deb http://mirrors.aliyun.com/debian-security buster/updates main contrib non-free
+# deb-src http://mirrors.aliyun.com/debian-security buster/updates main contrib non-free
 ```
 
 **Kali apt 换源**
@@ -927,7 +1041,7 @@ vim /etc/apt/sources.list
 
 # 清华源
 deb http://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free
-deb-src https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free
+deb-src http://mirrors.aliyun.com/kali kali-rolling main contrib non-free
 
 # 官方源
 deb http://http.kali.org/kali kali-rolling main non-free contrib
@@ -967,7 +1081,7 @@ apt install gdebi
 yum install make
 yum install gcc
 yum install gcc-c++
-./configure --prefix=/opt	# 配置,表示安装到/opt目录
+./configure --prefix=/opt	# 配置,表示安装到 /opt 目录
 make						# 编译
 make install				# 安装
 ```
@@ -976,6 +1090,7 @@ make install				# 安装
 
 > DNF(Dandified Yum)是一种的 RPM 软件包管理器。
 
+**安装 dnf**
 ```bash
 yum install epel-release
 yum install dnf
@@ -985,9 +1100,8 @@ yum install dnf
 
 > dpkg 命令是 Debian Linux 系统用来安装、创建和管理软件包的实用工具.
 
+**基本用法**
 ```bash
-# deb 是 debian linux的安装格式,跟 red hat 的 rpm 非常相似,最基本的安装命令是:dpkg -i file.deb
-
 dpkg -i xxxxx.deb  			# 安装软件
 dpkg -R /usr/local/src		# 安装路径下所有包
 dpkg -L 					# 查看软件安装位置
@@ -997,14 +1111,11 @@ dpkg -L 					# 查看软件安装位置
 
 > pacman 是 Arch 的包管理工具.
 
+**基本用法**
 ```bash
 pacman -S <package>			# 安装或者升级单个软件包
 pacman -R <package>			# 删除单个软件包,保留其全部已经安装的依赖关系
 pacman -Ss <package>		# 查询软件包
-
-# 常用软件
-pacman -S vim
-pacman -S fish
 ```
 
 **Pacman 换源**
@@ -1031,7 +1142,7 @@ rpm -V						# 验证
 
 > Snappy 是一个软件部署和软件包管理系统，最早由 Canonical 公司为了 Ubuntu 移动电话操作系统而设计和构建。其包称为“snap”，工具名为“snapd”，可在多种 Linux 发行版上运行，完成发行上游主导的软件部署。该系统的设计面向手机、云、物联网和台式机。
 
-**Centos**
+**Centos下安装snap**
 ```bash
 sudo yum install epel-release
 sudo yum install snapd
@@ -1039,7 +1150,7 @@ sudo systemctl enable --now snapd.socket
 sudo ln -s /var/lib/snapd/snap /snap
 ```
 
-**kali**
+**kali下安装snap**
 ```bash
 sudo apt-get update
 sudo apt install snapd
@@ -1047,7 +1158,7 @@ systemctl start snapd
 export PATH=$PATH:/snap/bin
 ```
 
-**Ubuntu**
+**Ubuntu下安装snap**
 ```bash
 sudo apt-get update
 sudo apt install snapd
@@ -1067,7 +1178,7 @@ yum provides ifconfig 		# 查看哪个包提供 ifconfig
 rm -f /var/run/yum.pid		# 强制解锁占用
 ```
 
-**本地 yum 源**
+**配置本地 yum 源**
 
 挂载到/mnt/cdrom
 ```bash
@@ -1094,7 +1205,7 @@ enabled=1					# 开启本地源
 yum list    #  看一下包
 ```
 
-**Alibaba yum 源**
+**配置 Alibaba yum 源**
 
 直接下载源
 ```bash
@@ -1182,6 +1293,17 @@ end
 ---
 
 # 系统管理
+
+## 系统信息
+
+- 内容参见 [信息](./笔记/信息.md)
+
+### 日志
+
+- 内容参见 [日志](./笔记/日志.md)
+
+---
+
 ## 系统设置
 ### 时间
 
@@ -1200,7 +1322,7 @@ hwclock	   	# 硬件时钟访问工具
 cal			# 查看日历
 ```
 
-**tips**
+**Tips**
 - **ntpd 与 ntpdate 的区别**
 	- ntpd 在实际同步时间时是一点点的校准过来时间的,最终把时间慢慢的校正对.而 ntpdate 不会考虑其他程序是否会阵痛,直接调整时间.
 	- 一个是校准时间,一个是调整时间.
@@ -1208,7 +1330,12 @@ cal			# 查看日历
 
 ### 语言
 
-`echo  $LANG` 查看当前操作系统的语言
+**查看系统语言**
+```bash
+echo  $LANG 			# 查看当前操作系统的语言
+```
+
+**修改系统语言**
 ```bash
 vim /etc/locale.conf
 
@@ -1219,7 +1346,22 @@ set LANG en_US.UTF-8	# 更改默认语言
 source   /etc/locale.conf
 ```
 
+**换界面显示语言**
+```bash
+dpkg-reconfigure locales
+# 空格是选择,Tab是切换,*是选中
+# 选中 en_US.UTF-8 和 zh_CN.UTF-8,确定后,将 en_US.UTF-8 选为默认,然后安装中文字体
+```
+
+**如果界面出现乱码,安装中文字体**
+```bash
+apt install xfonts-intl-chinese
+apt install ttf-wqy-microhei
+reboot
+```
+
 ### 启动项-计划任务
+
 **查看**
 ```bash
 chkconfig                   # 查看开机启动服务命令
@@ -1307,12 +1449,6 @@ getenforce			# 查看 selinux 状态
 - 不需要重启
 
 	`setenforce 0`
-
----
-
-## 系统信息
-
-- 内容参见 [信息](./笔记/信息.md)
 
 ---
 
@@ -1410,6 +1546,8 @@ setfacl -b <File/Folder>				# 删除 ACL
 
 关于 linux 的账号和认证更多内容参考笔记 [认证](./笔记/认证.md)
 
+---
+
 ## 进程管理
 
 **服务管理**
@@ -1476,7 +1614,7 @@ kill -s STOP <PID>						# 删除执行中的程序或工作
 	kill -9 <PID> && kill -KILL <pid> 	# 信号(SIGKILL)无条件终止进程
 killall <PID>							# 使用进程的名称来杀死进程
 
-ctrl+z # 将前台运行的任务暂停,仅仅是暂停,而不是将任务终止.
+ctrl+z	# 将前台运行的任务暂停,仅仅是暂停,而不是将任务终止.
 bg		# 转后台运行
 fg		# 转前台运行
 ```
@@ -1600,7 +1738,8 @@ df	# 报告驱动器的空间使用情况
 	df -ah	# 查看磁盘占用大的文件夹
 
 du	# 报告目录的空间使用情况
-	du -h /etc/yum | sort	# 以人类可读的格式进行显示,排序显示
+	du -h . | sort			# 以人类可读的格式进行显示,排序显示
+	du -hd 1 / | sort -hr
 	du -sh /etc/yum			# 特定目录的总使用量
 	du --max-depth=1 -h		# 查看文件夹下各个文件夹的磁盘占用
 ```

@@ -1,7 +1,7 @@
 # Kali
 
 <p align="center">
-    <img src="../../../assets/img/logo/kali.png" width="40%"></a>
+    <img src="../../../assets/img/logo/kali.png" width="40%">
 </p>
 
 ---
@@ -15,7 +15,7 @@
 **官网**
 - https://www.kali.org/downloads/
 
-**教程**
+**教程 & Reference**
 - [Kali-learning-notes Wiki](https://github.com/Keybird0/Kali-learning-notes/wiki)
 - [Kali Linux 渗透测试的艺术（中文版）](https://jobrest.gitbooks.io/kali-linux-cn/content/table_of_contents.html)
 - [大学霸 Kali Linux 安全渗透教程](https://wizardforcel.gitbooks.io/daxueba-kali-linux-tutorial/content/)
@@ -117,8 +117,9 @@ pip3 -V
 ```
 
 在 linux 安装了多版本 python 时(例如 python2.6 和 2.7),pip 安装的包不一定是用户想要的位置,此时可以用 -t 选项来指定位置
-
-`pip install -t /usr/local/lib/python2.7/site-packages/ docker`
+```bash
+pip install -t /usr/local/lib/python2.7/site-packages/ docker
+```
 
 ---
 
@@ -137,7 +138,7 @@ vim /etc/proxychains.conf
 
 socks5 127.0.0.1 1080   # 改成你懂的
 ```
-在需要代理的命令前加上 proxychains4 ,如:`proxychains4 wget https://www.google.com/`
+在需要代理的命令前加上 proxychains4 ,如 : `proxychains4 wget https://www.google.com/`
 
 ---
 
@@ -149,7 +150,7 @@ echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
 ```
 ```bash
-service ssh restart     # 启动 ssh
+systemctl start ssh     # 启动 ssh
 systemctl enable ssh    # 设置为开机自启
 
 # 或
@@ -192,6 +193,24 @@ dpkg -i Nessus-8.8.0-ubuntu1110_amd64.deb
 ```bash
 ./nessuscli update nessus-updates-8.8.0.tar.gz
 ./nessusd   # 重新启动下
+```
+
+**docker 部署**
+
+```bash
+docker run -d -p 3443:3443 -p 8834:8834  --name bobohacker -it yakoazz/bobohacker
+```
+- nesss地址 : https://127.0.0.1:8443 账号密码 bobohacker/bobohacker
+- awvs地址 : https://127.0.0.1:3443 账号密码 bobo@hacker.com/B0bohacker
+- nessus 应用自启 awvs13 要 attach 到容器里面 root 目录下运行下 awvs.sh
+
+---
+
+## rdesktop
+
+kali 自带
+```bash
+rdesktop <目标IP>
 ```
 
 ---

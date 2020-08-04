@@ -1,7 +1,7 @@
 # Team-Plan
 
 <p align="center">
-    <img src="../../assets/img/Misc/Team-Plan.jpg" width="70%"></a>
+    <img src="../../assets/img/banner/Team-Plan.jpg" width="70%">
 </p>
 
 ---
@@ -21,8 +21,27 @@
 
 # 任务分配
 
+**看板**
 - [Trello](https://trello.com/) - `强烈推荐`
     - 好用,有时需科学上网,免费版够用
+- [wekan](https://github.com/wekan/wekan)
+    - 开源的看板工具方案,还行
+- [日事清](https://www.rishiqing.com/)
+    - bug贼多,还不能实时刷新,价格不高
+- [teambition](https://www.teambition.com/)
+    - 下个世纪的设计,价格不高
+- [领歌](https://www.leangoo.com/)
+    - 上个世纪的设计
+
+**团队分析**
+- [x-developer](https://x-developer.cn/)
+
+---
+
+# 项目管理
+
+- [Jira](https://www.atlassian.com/zh/software/jira)
+    - 好用,但免费版只能参与10人
 
 ---
 
@@ -79,6 +98,7 @@
 - [mkdocs](https://www.mkdocs.org/)
 - [wiki.js](https://wiki.js.org/)
 - [star7th/showdoc](https://github.com/star7th/showdoc)
+- [Confluence](https://www.atlassian.com/software/confluence) - `推荐`
 
 ---
 
@@ -87,3 +107,12 @@
 - [石墨文档](https://shimo.im/) - `强烈推荐`
 - [腾讯文档](https://docs.qq.com/)
 - [Google 文档](https://docs.google.com/document)
+
+---
+
+# 远程访问
+
+- [GotoHTTP](http://gotohttp.com/) - `不推荐`
+    - 可以 web 访问的远程控制平台
+- [TeamViewer](https://www.teamviewer.com/en-us/)
+- [AnyDesk](https://anydesk.com/en)

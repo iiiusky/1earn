@@ -1,7 +1,7 @@
 # SET
 
 <p align="center">
-    <img src="../../../assets/img/logo/set.png" width="30%"></a>
+    <img src="../../../assets/img/logo/set.png" width="30%">
 </p>
 
 ---
@@ -15,7 +15,7 @@
 **项目地址**
 - https://github.com/trustedsec/social-engineer-toolkit/
 
-**文章**
+**文章 & Reference**
 - [Kali Linux工具集简介 - SET - 邮箱](https://blog.csdn.net/lendq/article/details/79314159)
 
 ---

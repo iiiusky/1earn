@@ -10,7 +10,7 @@
 ```
 
 <p align="center">
-    <a href="https://commons.wikimedia.org/wiki/File:William_J._McCloskey_(1859%E2%80%931941),_Wrapped_Oranges,_1889._Oil_on_canvas._Amon_Carter_Museum_of_American_Art.jpg"><img src="../../../assets/img/运维/Linux/Secure-Linux.jpg" width="90%"></a>
+    <a href="https://commons.wikimedia.org/wiki/File:William_J._McCloskey_(1859%E2%80%931941),_Wrapped_Oranges,_1889._Oil_on_canvas._Amon_Carter_Museum_of_American_Art.jpg"><img src="../../../assets/img/banner/Secure-Linux.jpg" width="90%"></a>
 </p>
 
 <p align="center">
@@ -51,7 +51,7 @@
 **最近文件**
 ```bash
 find / -ctime -2                # 查找72小时内新增的文件
-find ./ -mtime 0 -name "*.jsp"  #​ 查找24小时内被修改的 JSP 文件
+find ./ -mtime 0 -name "*.jsp"  # 查找24小时内被修改的 JSP 文件
 find / *.jsp -perm 4777         # 查找777的权限的文件
 ```
 
@@ -393,7 +393,8 @@ cat /var/spool/cron/crontabs/root
 **简单查找**
 ```bash
 awk -F: '{if($3==0||$4==0)print $1}' /etc/passwd            # 查看 UID\GID 为0的帐号
-awk -F: '{if($7!="/usr/sbin/nologin")print $1}' /etc/passwd # 查看能够登录的帐号
+awk -F: '{if($7!="/usr/sbin/nologin"&&$7!="/sbin/nologin")print $1}' /etc/passwd # 查看能够登录的帐号
+awk '/\$1|\$6/{print $1}' /etc/shadow                       # 查询可以远程登录的帐号信息
 lastlog                                                     # 系统中所有用户最近一次登录信息
 lastb                                                       # 显示用户错误的登录列表
 users                                                       # 打印当前登录的用户，每个用户名对应一个登录会话。如果一个用户不止一个登录会话，其用户名显示相同次数
@@ -540,6 +541,8 @@ netstat -tnlp | grep ssh
 nmap -sV -p 22 localhost
 ```
 
+更多内容查看 [网络](./笔记/信息.md#网络)
+
 **防**
 - [EtherDream/anti-portscan: 使用 iptables 防止端口扫描](https://github.com/EtherDream/anti-portscan)
     ```bash
@@ -643,7 +646,6 @@ net.ipv4.icmp_echo_ignore_all=1
     sudo grep "Failed password for invalid user" /var/log/secure | awk '{print $13}' | sort | uniq -c | sort -nr | more
     grep "Failed password" /var/log/secure | awk {'print $9'} | sort | uniq -c | sort -nr
     grep -o "Failed password" /var/log/secure|uniq -c
-    grep "Accepted " /var/log/secure | awk '{print $1,$2,$3,$9,$11}
     ```
 
 - **IP 信息**
@@ -652,7 +654,7 @@ net.ipv4.icmp_echo_ignore_all=1
     grep "Failed password for root" /var/log/auth.log | awk '{print $11}' | sort | uniq -c | sort -nr | more
 
     # Red Hat 系的发行版
-    grep "Failed password for root" /var/log/secure | awk '{print $11}' | sort
+    grep "Failed password for root" /var/log/secure | awk '{print $11}' | sort | uniq -c | sort -nr | more
     ```
 
 - **登录成功**
@@ -662,6 +664,7 @@ net.ipv4.icmp_echo_ignore_all=1
 
     # Red Hat 系的发行版
     grep 'Accepted' /var/log/secure | awk '{print $11}' | sort | uniq -c | sort -nr
+    grep "Accepted " /var/log/secure | awk '{print $1,$2,$3,$9,$11}'
     grep "Accepted " /var/log/secure* | awk '{print $1,$2,$3,$9,$11}'
     ```
 
@@ -698,33 +701,45 @@ net.ipv4.icmp_echo_ignore_all=1
 - **配置使用 RSA 私钥登陆**
 
     1. 先生成你的客户端的密钥,包括一个私钥和公钥
+        ```bash
+        ssh-keygen -t rsa
+        ```
+
     2. 把公钥拷贝到服务器上,注意,生成私钥的时候,文件名是可以自定义的,且可以再加一层密码,所以建议文件名取自己能识别出哪台机器的名字.
+        ```bash
+        cd .ssh
+        scp id_rsa.pub root@XX.XX.XX.XX:~/
+        ```
+
     3. 然后在服务器上,你的用户目录下,新建 `.ssh` 文件夹,并将该文件夹的权限设为 700
+        ```bash
+        cd /
+        mkdir .ssh
+        chmod 700 .ssh
+        ```
+
     4. 新建一个 authorized_keys,这是默认允许的 key 存储的文件.如果已经存在,则只需要将上传的 id_rsa.pub 文件内容追加进去即可,如果不存在则新建并改权限为 400 即可. 然后编辑 ssh 的配置文件
+        ```bash
+        mv id_rsa.pub .ssh
+        cd .ssh
+        cat id_rsa.pub >> authorized_keys
+        chmod 600 authorized_keys
+        ```
+        ```bash
+        vim /etc/ssh/sshd_config
 
-    ```bash
-    ssh-keygen -t rsa
-    scp id_rsa.pub root@XX.XX.XX.XX:~/
-    ```
-    ```bash
-    cd /
-    mkdir .ssh
-    chmod 700 .ssh
-    mv id_rsa.pub .ssh
-    cd .ssh
-    cat id_rsa.pub >> authorized_keys
-    chmod 600 authorized_keys
-    ```
-    ```bash
-    vim /etc/ssh/sshd_config
+        RSAAuthentication yes                           # RSA 认证
+        PubkeyAuthentication yes                        # 开启公钥验证
+        AuthorizedKeysFile /root/.ssh/authorized_keys   # 验证文件路径
+        PasswordAuthentication no                       # 禁止密码登录
+        ```
 
-    RSAAuthentication yes                           # RSA 认证
-    PubkeyAuthentication yes                        # 开启公钥验证
-    AuthorizedKeysFile /root/.ssh/authorized_keys   # 验证文件路径
-    PasswordAuthentication no                       # 禁止密码登录
-    ```
+        `sudo service sshd restart` 重启 sshd 服务
 
-    `sudo service sshd restart` 重启 sshd 服务
+    5. 测试使用私钥登陆
+        ```bash
+        ssh root@x.x.x.x -i id_rsa
+        ```
 
 - **禁止 root 用户登录**
 
@@ -777,7 +792,7 @@ net.ipv4.icmp_echo_ignore_all=1
 
 - **内核级 rootkit**
 
-    可以通过 unhide 等工具进行排查,更多内容见 [应急](../../安全/笔记/BlueTeam/应急.md#rootkit)
+    可以通过 unhide 等工具进行排查,更多内容见 [应急溯源](../../安全/笔记/BlueTeam/应急溯源.md#rootkit)
 
 - **深信服 Web 后门扫描**
 
@@ -786,5 +801,5 @@ net.ipv4.icmp_echo_ignore_all=1
 **杀毒**
 - **[ClamavNet](https://www.clamav.net/downloads)**
 
-**Reference**
+**Source & Reference**
 - [linux常见backdoor及排查技术](https://xz.aliyun.com/t/4090)

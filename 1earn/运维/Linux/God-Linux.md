@@ -10,7 +10,7 @@
 ```
 
 <p align="center">
-    <a href="https://en.wikipedia.org/wiki/The_Portrait_(Magritte)"><img src="../../../assets/img/运维/Linux/God-Linux.jpg" width="70%"></a>
+    <a href="https://en.wikipedia.org/wiki/The_Portrait_(Magritte)"><img src="../../../assets/img/banner/God-Linux.jpg" width="90%"></a>
 </p>
 
 <p align="center">
@@ -48,6 +48,13 @@ while :;do printf "\e[$[RANDOM%LINES+1];$[RANDOM%COLUMNS+1]f${P[$RANDOM%5]}";don
 # 让 freebad 机器叫出声
 echo “T250L8CE-GE-C” > /dev/speaker
 echo “O1L15aO2L15bO3L15cO4L15d” > /dev/speaker
+
+# 在不使用 chmod 的情况下运行脚本
+. ./test.sh
+{.,./test.sh}
+bash < test.sh
+cat test.sh|sh
+curl -s file://`pwd`/test.sh | sh
 ```
 
 ## net

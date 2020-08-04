@@ -1,14 +1,18 @@
 # Misc-Plan
 
 <p align="center">
-    <a href="https://www.pixiv.net/member_illust.php?mode=medium&illust_id=69281543"><img src="../../assets/img/Misc/Misc-Plan.jpg" width="60%"></a>
+    <a href="https://twitter.com/mittye97/status/1235824863857659905"><img src="../../assets/img/banner/Misc-Plan.jpg" width="90%"></a>
 </p>
 
 ---
 
 # 激活
 
-注意:Windows 系统和 Micrsoft Office 软件都必须是 VOL 版本.
+> 注意 : Windows 系统和 Microsoft Office 软件都必须是 VOL 版本.
+
+- [Wind4/vlmcsd](https://github.com/Wind4/vlmcsd) - kms 服务器
+- [TGSAN/CMWTAT_Digital_Edition](https://github.com/TGSAN/CMWTAT_Digital_Edition) - 数字权利激活工具
+- [kkkgo/KMS_VL_ALL](https://github.com/kkkgo/KMS_VL_ALL) - kms 激活脚本
 
 **激活 Windows**
 
@@ -38,23 +42,25 @@ CSCRIPT OSPP.VBS /DSTATUS
 
 - centos环境
 
-```bash
-yum install epel-release
-yum install nodejs npm
-git clone https://github.com/nondanee/UnblockNeteaseMusic.git
-cd UnblockNeteaseMusic
-npm install forever -g
-npm install
-forever start app.js -p 18080   # 启动
-firewall-cmd --permanent --zone=public --add-port=18080/tcp
-firewall-cmd --reload
-```
+    ```bash
+    yum install epel-release
+    yum install nodejs npm
+    git clone https://github.com/nondanee/UnblockNeteaseMusic.git
+    cd UnblockNeteaseMusic
+    npm install forever -g
+    npm install
+    forever start app.js -p 18080   # 启动
+    firewall-cmd --permanent --zone=public --add-port=18080/tcp
+    firewall-cmd --reload
+    ```
 
-客户端配置 http 代理 IP:18080
+    ```bash
+    forever stop app.js             # 关闭服务
+    ```
 
-```bash
-forever stop app.js             # 关闭
-```
+- 客户端
+
+    配置 http 代理 IP:18080
 
 # DNS
 
@@ -89,6 +95,10 @@ ipconfig /flushdns
 # 各种代理/源
 ## git
 
+<p align="center">
+    <img src="../../assets/img/logo/git.svg" width="15%">
+</p>
+
 ```git
 // 查看当前代理设置
 git config --global http.proxy
@@ -104,6 +114,10 @@ git config --global --unset https.proxy
 ```
 
 ## Docker
+
+<p align="center">
+    <img src="../../assets/img/logo/Docker.png" width="20%">
+</p>
 
 - 阿里云 : https://cr.console.aliyun.com/#/accelerator
 - DaoCloud : https://www.daocloud.io/mirror#accelerator-doc
@@ -137,6 +151,10 @@ Windows 安装文件:http://mirrors.aliyun.com/docker-toolbox/windows/docker-for
 
 ## node&js
 
+<p align="center">
+    <img src="../../assets/img/logo/npm&Node.png" width="25%">
+</p>
+
 ```bash
 npm install -g nrm
 nrm ls
@@ -151,38 +169,44 @@ npm config delete proxy  # 取消代理
 
 常用的国内镜像包括:
 1. 阿里云 http://mirrors.aliyun.com/pypi/simple/
-2. 豆瓣http://pypi.douban.com/simple/
+2. 豆瓣 http://pypi.douban.com/simple/
 3. 清华大学 https://pypi.tuna.tsinghua.edu.cn/simple/
 4. 中国科学技术大学 http://pypi.mirrors.ustc.edu.cn/simple/
-5. 华中科技大学http://pypi.hustunique.com/
+5. 华中科技大学 http://pypi.hustunique.com/
 
 - 临时使用:
-可以在使用 pip 的时候,加上参数 -i 和镜像地址 `https://pypi.tuna.tsinghua.edu.cn/simple`
+
+    可以在使用 pip 的时候,加上参数 -i 和镜像地址 `https://pypi.tuna.tsinghua.edu.cn/simple`
 例如:`pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pandas`,这样就会从清华镜像安装 pandas 库.
 
 - 永久修改,一劳永逸:
+
     1. Linux 下,修改 ~/.pip/pip.conf (没有就创建一个文件夹及文件.文件夹要加".",表示是隐藏文件夹)
-    ```bash
-    mkdir -p ~/.pip/
-    ```
-    ```bash
-    sudo tee ~/.pip/pip.conf <<-'EOF'
-    [global]
-    index-url = https://pypi.tuna.tsinghua.edu.cn/simple
-    [install]
-    trusted-host = https://pypi.tuna.tsinghua.edu.cn
-    EOF
-    ```
+        ```bash
+        mkdir -p ~/.pip/
+        ```
+        ```bash
+        sudo tee ~/.pip/pip.conf <<-'EOF'
+        [global]
+        index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+        [install]
+        trusted-host = https://pypi.tuna.tsinghua.edu.cn
+        EOF
+        ```
 
     2. windows 下,直接在 user 目录中创建一个 pip 目录,如:C:\Users\xx\pip,然后新建文件 pip.ini,即 %HOMEPATH%\pip\pip.ini,在 pip.ini 文件中输入以下内容:
-    ```vim
-    [global]
-    index-url = https://pypi.tuna.tsinghua.edu.cn/simple
-    [install]
-    trusted-host = https://pypi.tuna.tsinghua.edu.cn
-    ```
+        ```vim
+        [global]
+        index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+        [install]
+        trusted-host = https://pypi.tuna.tsinghua.edu.cn
+        ```
 
 ## 终端
+
+<p align="center">
+    <img src="../../assets/img/logo/terminal.svg" width="15%">
+</p>
 
 **proxychains**
 
@@ -198,9 +222,10 @@ npm config delete proxy  # 取消代理
 ## GO
 
 **goproxy**
+
 - https://goproxy.io/
 
-    *linux*
+- *linux*
     ```bash
     # Enable the go modules feature
     export GO111MODULE=on
@@ -208,7 +233,7 @@ npm config delete proxy  # 取消代理
     export GOPROXY=https://goproxy.io
     ```
 
-    *windows*
+- *windows*
     ```PowerShell
     # Enable the go modules feature
     $env:GO111MODULE="on"
@@ -217,11 +242,16 @@ npm config delete proxy  # 取消代理
     ```
 
 **GoLand**
+
 > Setting-->Appearance & Behavior-->System Setting-->HTTP Proxy
 
 ---
 
 # vscode
+
+<p align="center">
+    <img src="../../assets/img/logo/vscode.svg" width="15%">
+</p>
 
 `谁和我一起吹 vscode 我们就是永远的好朋友🤞`
 
@@ -247,6 +277,23 @@ npm config delete proxy  # 取消代理
 
 # ffmpeg
 
+<p align="center">
+    <img src="../../assets/img/logo/ffmpeg.png" width="15%">
+</p>
+
+**视频剪切**
+```bash
+ffmpeg -ss 00:00:00 -t 00:00:30 -i test.mp4 -vcodec copy -acodec copy output.mp4
+* -ss 指定从什么时间开始
+* -t 指定需要截取多长时间
+* -i 指定输入文件
+```
+
+**格式转换**
+```bash
+ffmpeg -i input.mp4 output.avi
+```
+
 **视频合并**
 ```bash
 
@@ -261,9 +308,9 @@ ffmpeg -f concat -i filelist.txt -c copy output.mkv
 
 **视频压缩**
 
-`ffmpeg.exe -i "E:\Temp\002.mp4" -r 10 -b:a 32k "E:\Temp\002_mod.mp4"` 常规用法
+常规用法 : `ffmpeg.exe -i "E:\Temp\002.mp4" -r 10 -b:a 32k "E:\Temp\002_mod.mp4"`
 
-`ffmpeg -y -i /mnt/sdcard/demo1.mp4 -strict -2 -vcodec libx264 -preset ultrafast -crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 360x640 -aspect 16:9 /mnt/sdcard/democompress.mp4` 优秀用法
+优秀用法 : `ffmpeg -y -i /mnt/sdcard/demo1.mp4 -strict -2 -vcodec libx264 -preset ultrafast -crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 360x640 -aspect 16:9 /mnt/sdcard/democompress.mp4`
 
 `ffmpeg -y -i in.mp4 -s 176x144 -vcodec libx264 -vpre fast -b 800000 out.mp4`
 ```

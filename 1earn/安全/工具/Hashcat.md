@@ -1,7 +1,7 @@
 # Hashcat
 
 <p align="center">
-    <img src="../../../assets/img/logo/hashcat.jpg" width="20%"></a>
+    <img src="../../../assets/img/logo/Hashcat.jpg" width="20%">
 </p>
 
 ---
@@ -19,8 +19,8 @@ Hashcat 自称是世界上最快的密码恢复工具。它在2015年之前拥�
 **官网**
 - https://hashcat.net/hashcat/
 
-**文章**
-- [Hashcat的使用手册总结 ](https://xz.aliyun.com/t/4008)
+**文章 & Reference**
+- [Hashcat的使用手册总结](https://xz.aliyun.com/t/4008)
 
 **工具**
 - [nccgroup/hashcrack](https://github.com/nccgroup/hashcrack) - 解包一些散列类型，选择合理的选项并调用 hashcat,hashcat 辅助工具
@@ -83,6 +83,11 @@ hashcat --help
 
 # 例子
 
+**查看爆破案例**
+```bash
+hashcat --example-hashes | less
+```
+
 **爆破 drupal 7 的密码 hash**
 ```bash
 
@@ -97,9 +102,19 @@ source.txt 你要爆破的 hash 列表
 pass01.txt 你的密码表
 ```
 
-![](../../../assets/img/安全/实验/VulnHub/DC/DC1/9.png)
+![](../../../assets/img/安全/实验/靶机/VulnHub/DC/DC1/9.png)
 
 **爆破wifi握手包**
 ```bash
 hashcat -m 2500 wireless.hccapx pass.txt --force
+```
+
+**爆破 NTLM-hash**
+```bash
+hashcat -m 1000 hash.txt pass1.txt
+```
+
+**爆破 net-NTLMv2**
+```bash
+hashcat -m 5600 hash.txt pass1.txt
 ```

